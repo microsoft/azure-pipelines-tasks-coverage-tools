@@ -1,3 +1,3 @@
-# Repository setup required :wave:
+# azure-pipelines-tasks-codecoverage-tools
       
-Please visit the website URL :point_right: for this repository to complete the setup of this repository and configure access controls.
+This is a repository for the npm package - https://www.npmjs.com/package/azure-pipelines-tasks-codecoverage-tools.
