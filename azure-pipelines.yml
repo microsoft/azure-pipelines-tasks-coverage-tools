@@ -12,8 +12,6 @@ jobs:
     vmImage: windows-2019
   steps:
   - template: ci/azure-pipelines-steps.yml
-    parameters:
-      os: Windows_NT
 
 #################################################
 - job: 'linux'
@@ -23,16 +21,29 @@ jobs:
     vmImage: ubuntu-20.04
   steps:
   - template: ci/azure-pipelines-steps.yml
-    parameters:
-      os: Linux
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '_build'
+      artifactType: 'pipeline'
+      artifactName: 'npm-package'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+
+  # For CI runs on master, automatically publish packages
+  - bash: |
+        echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+        cd _build
+        npm publish || true # Ignore publish failures, usually will happen because package already exists
+    displayName: NPM Publish
+    condition: and(succeeded(), in(variables['build.reason'], 'IndividualCI', 'BatchedCI', 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    env:
+      NPM_TOKEN: $(npmPublishToken)
 
 #################################################
 - job: 'macOS'
 #################################################
   displayName: Build on MacOS
   pool:
-    vmImage: macOS-10.15
+    vmImage: macOS-11
   steps:
   - template: ci/azure-pipelines-steps.yml
-    parameters:
-      os: MacOS

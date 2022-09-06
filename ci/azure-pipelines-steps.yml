@@ -10,24 +10,3 @@ steps:
 
 - script: npm run build
   displayName: 'NPM run build'
-
-- script: npm pack
-  displayName: 'NPM pack'
-  condition: and(succeeded(), eq(variables['build.sourcebranchname'], 'main'), eq(variables.os, 'Windows_NT'))
-
-- task: CopyFiles@2
-  inputs:
-    sourceFolder: '$(Build.SourcesDirectory)'
-    contents: |
-      '*.tgz'
-      'package.json'
-    targetFolder: $(Build.ArtifactStagingDirectory)
-  displayName: 'Copy NPM package to staging'
-  condition: and(succeeded(), eq(variables['build.sourcebranchname'], 'main'), eq(variables.os, 'Windows_NT'))
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: npm
-  displayName: 'Publish NPM artifact'
-  condition: and(succeeded(), eq(variables['build.sourcebranchname'], 'main'), eq(variables.os, 'Windows_NT'))
