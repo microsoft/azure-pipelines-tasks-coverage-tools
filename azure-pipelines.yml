@@ -1,7 +1,12 @@
-jobs:
+trigger:
+- main
+- features/*
+- releases/*
 
-# Build on Windows
-- job: 'VS2017_Win2016'
+jobs:
+#################################################
+- job: 'windows'
+#################################################
   displayName: Build on Windows
   pool:
     vmImage: 'vs2017-win2016'
@@ -10,8 +15,9 @@ jobs:
     parameters:
       os: Windows_NT
 
-# Build on Linux
-- job: 'Ubuntu_1804'
+#################################################
+- job: 'linux'
+#################################################
   displayName: Build on Linux
   pool:
     vmImage: 'Ubuntu-18.04'
@@ -20,8 +26,9 @@ jobs:
     parameters:
       os: Linux
 
-# Build on MacOS
-- job: 'MacOS_1014'
+#################################################
+- job: 'macOS'
+#################################################
   displayName: Build on MacOS
   pool:
     vmImage: 'macOS-10.14'
