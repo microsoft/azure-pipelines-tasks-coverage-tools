@@ -10,9 +10,9 @@ Codecoverage libraries for [Azure Pipelines](https://azure.microsoft.com/en-us/s
 |![macOS](res/apple_med.png) **macOS**|[![Build & Test][macOS-build-badge]][build]| 
 |![Linux-x64](res/ubuntu_med.png) **Linux**|[![Build & Test][linux-build-badge]][build]|
 
-[win-build-badge]: https://dev.azure.com/mseng/PipelineTools/_apis/build/status/azure-pipelines-tasks-coverage-tools-ci?branchName=master&jobname=windows
-[macOS-build-badge]: https://dev.azure.com/mseng/PipelineTools/_apis/build/status/azure-pipelines-tasks-coverage-tools-ci?branchName=master&jobname=macOS
-[linux-build-badge]: https://dev.azure.com/mseng/PipelineTools/_apis/build/status/azure-pipelines-tasks-coverage-tools-ci?branchName=master&jobname=linux
+[win-build-badge]: https://dev.azure.com/mseng/PipelineTools/_apis/build/status/azure-pipelines-tasks-coverage-tools-ci?branchName=main&jobname=windows
+[macOS-build-badge]: https://dev.azure.com/mseng/PipelineTools/_apis/build/status/azure-pipelines-tasks-coverage-tools-ci?branchName=main&jobname=macOS
+[linux-build-badge]: https://dev.azure.com/mseng/PipelineTools/_apis/build/status/azure-pipelines-tasks-coverage-tools-ci?branchName=main&jobname=linux
 [build]: https://dev.azure.com/mseng/PipelineTools/_build/latest?definitionId=
 
 [![NPM version][npm-lib-image]][npm-lib-url]
