@@ -210,3 +210,13 @@ _Pvt_Extensions/
 ModelManifest.xml
 /Package
 LoadTest.code-workspace
+
+# Npm lock files
+package-lock.json
+
+# Optional npm cache directory
+.npm
+
+# Packed NPM
+.tgz
+.gz
