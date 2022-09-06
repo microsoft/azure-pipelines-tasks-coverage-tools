@@ -1,0 +1,31 @@
+jobs:
+
+# Build on Windows
+- job: 'VS2017_Win2016'
+  displayName: Build on Windows
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+  - template: ci/azure-pipelines-steps.yml
+    parameters:
+      os: Windows_NT
+
+# Build on Linux
+- job: 'Ubuntu_1804'
+  displayName: Build on Linux
+  pool:
+    vmImage: 'Ubuntu-18.04'
+  steps:
+  - template: ci/azure-pipelines-steps.yml
+    parameters:
+      os: Linux
+
+# Build on MacOS
+- job: 'MacOS_1014'
+  displayName: Build on MacOS
+  pool:
+    vmImage: 'macOS-10.14'
+  steps:
+  - template: ci/azure-pipelines-steps.yml
+    parameters:
+      os: MacOS

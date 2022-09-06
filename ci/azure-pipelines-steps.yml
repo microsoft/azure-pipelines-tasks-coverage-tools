@@ -1,0 +1,33 @@
+steps:
+
+- task: NodeTool@0
+  displayName: Use Node 10.x
+  inputs:
+    versionSpec: "10.24.1"
+
+- script: npm install
+  displayName: 'npm install'
+
+- script: npm run build
+  displayName: 'npm run build'
+
+- script: npm pack
+  displayName: 'npm pack'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables.os, 'Windows_NT'))
+
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '$(Build.SourcesDirectory)'
+    contents: |
+      '*.tgz'
+      'package.json'
+    targetFolder: $(Build.ArtifactStagingDirectory)
+  displayName: 'Copy npm package to staging'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables.os, 'Windows_NT'))
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: npm
+  displayName: 'Publish npm artifact'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables.os, 'Windows_NT'))
