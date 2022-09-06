@@ -23,7 +23,7 @@ steps:
       'package.json'
     targetFolder: $(Build.ArtifactStagingDirectory)
   displayName: 'Copy NPM package to staging'
-  condition: and(succeeded(), eq(variables['build.sourcebranchname'], main'), eq(variables.os, 'Windows_NT'))
+  condition: and(succeeded(), eq(variables['build.sourcebranchname'], 'main'), eq(variables.os, 'Windows_NT'))
 
 - task: PublishBuildArtifacts@1
   inputs:
