@@ -17,6 +17,11 @@ export const classDirs = 'some/folder1/with/classes,some/folder2/with/classes';
 export const sourceDir = 'source/dir';
 export const sourceDirs = 'source/dir1,source/dir2';
 export const reportDir = 'report/dir';
+export const groupId = 'some.group.plugins';
+export const parentData = {groupId: groupId};
+export const formattedParentData = '<parentData></parentData>';
+export const modules = '<modules><module name="module"></module></modules>';
+export const reportArtifactId = 'report-artifact-id';
 export const getFormattedFileCollectionAssignGradleOutput = 'fileCollectionAssign';
 export const aggregate = 'aggregateFake';
 export const baseDir = 'base/dir'
@@ -62,7 +67,7 @@ export const enableForkingBuildConfigWithoutTargetNode = enableForkingBuildConfi
 export const enableForkingBuildConfigWithJavacConfig = cheerio.load('<project><target><javac/></target></project>', <CheerioOptionsInterface>{ xmlMode: true, withDomLvl1: false });
 export const enableForkingBuildConfigWithJavacNode = enableForkingBuildConfigWithJavacConfig('target').get()[0] as unknown as CheerioElement;
 export const addCodeCoverageDataPomJsonSingle = { project: {} };
-export const addCodeCoverageDataPomJsonMulti = { project: { modules: [] } };
+export const addCodeCoverageDataPomJsonMulti = { project: { modules: [{ module: [] }] } };
 export const addCodeCoverageDataPomJsonWithoutProject = { node: {} };
 export const getBuildDataNodeBuildJsonContentBuildString = () => ({ project: { build: "string value" } });
 export const getBuildDataNodeBuildJsonContentBuildArray = () => ({ project: { build: [{ element: 'some value' }] } });

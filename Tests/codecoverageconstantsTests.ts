@@ -80,13 +80,22 @@ export function codecoverageconstantsTests() {
             assert.strictEqual(actual, expectedResults.coberturaGradleMultiModuleWithNotSpecifiedClassDir);
         });
 
-        it('function jacocoMavenPluginEnable  should return correct configuration', () => {
+        it('function jacocoMavenPluginEnable should return correct configuration', () => {
             const actual = codecoverageconstantsRewire.jacocoMavenPluginEnable(fakeData.includeFilter, fakeData.excludeFilter, fakeData.reportDir);
             assert.deepStrictEqual(actual, expectedResults.jacocoMavenSingleProject);
         });
 
         it('function jacocoMavenMultiModuleReport should return correct configuration', () => {
-            const actual = codecoverageconstantsRewire.jacocoMavenMultiModuleReport(fakeData.reportDir, fakeData.sourceDirs, fakeData.classDirs, fakeData.includeFilterStringified, fakeData.excludeFilterStringified);
+            const actual = codecoverageconstantsRewire.jacocoMavenMultiModuleReport(
+                fakeData.reportArtifactId,
+                fakeData.sourceDirs,
+                fakeData.classDirs,
+                fakeData.includeFilterStringified,
+                fakeData.excludeFilterStringified,
+                fakeData.groupId,
+                fakeData.formattedParentData,
+                fakeData.modules);
+            
             assert.strictEqual(actual, expectedResults.jacocoMavenMultiProject);
         });
 

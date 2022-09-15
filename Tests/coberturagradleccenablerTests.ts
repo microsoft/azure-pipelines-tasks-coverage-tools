@@ -81,7 +81,7 @@ export function coberturagradleccenablerTests() {
                     gradle5xOrHigher: 'true'
                 });
             sandbox.assert.calledOnce(ccc.coberturaGradleMultiModuleEnable);
-            assert.strictEqual(actual, true);
+            assert.strictEqual(actual, '');
         });
 
         it('should call \'coberturaGradleSingleModuleEnable\' if project is single-module', async () => {
@@ -96,7 +96,7 @@ export function coberturagradleccenablerTests() {
                     gradle5xOrHigher: 'true'
                 });
             sandbox.assert.calledOnce(ccc.coberturaGradleSingleModuleEnable);
-            assert.strictEqual(actual, true);
+            assert.strictEqual(actual, '');
         });
 
         it('should reject promise in case of error', async () => {

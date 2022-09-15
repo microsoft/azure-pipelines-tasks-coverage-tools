@@ -1,7 +1,8 @@
 import * as assert from 'assert';
 import * as ccc from "../codecoverageconstants";
 import * as expectedResults from "./data/expectedResults";
-import * as fakeData from "./data/fakeData"
+import * as fakeData from "./data/fakeData";
+import * as path from "path";
 import * as Q from "q";
 import * as rewire from 'rewire';
 import * as sinon from 'sinon';
@@ -111,13 +112,17 @@ export function jacocomavenccenablerTests() {
         });
         
         it('should return correct value if project is single-module', async () => {
-            const actual = await jacocoMavenCodeCoverageEnablerInstance.addCodeCoverageData(fakeData.addCodeCoverageDataPomJsonSingle);
-            assert.deepStrictEqual(actual, expectedResults.addCodeCoverageDataSingleProject);
+            const config = fakeData.addCodeCoverageDataPomJsonSingle;
+            const actual = await jacocoMavenCodeCoverageEnablerInstance.addCodeCoverageData(config);
+            assert.strictEqual(actual, expectedResults.addCodeCoverageDataSingleProject);
+            assert.deepStrictEqual(config, expectedResults.addCodeCoverageDataSingleProjectConfig);
         });
         
         it('should return correct value if project is multi-module', async () => {
-            const actual = await jacocoMavenCodeCoverageEnablerInstance.addCodeCoverageData(fakeData.addCodeCoverageDataPomJsonMulti);
-            assert.deepStrictEqual(actual, expectedResults.addCodeCoverageDataMultiProject);
+            const config = fakeData.addCodeCoverageDataPomJsonMulti;
+            const actual = await jacocoMavenCodeCoverageEnablerInstance.addCodeCoverageData(config);
+            assert.strictEqual(actual, expectedResults.addCodeCoverageDataMultiProject);
+            assert.deepStrictEqual(config, expectedResults.addCodeCoverageDataMultiProjectConfig);
         });
     });
     
@@ -182,23 +187,24 @@ export function jacocomavenccenablerTests() {
     });
     
     describe('function createMultiModuleReport', () => {
-        let sourceDirsStub, classDirsStub, includeFilterStub, excludeFilterStub, isNullOrWhitespaceStub, jacocoMavenMultiModuleReportStub;
+        let isNullOrWhitespaceStub, jacocoMavenMultiModuleReportStub;
         
         before(() => {
-            sourceDirsStub = sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'sourceDirs');
-            classDirsStub = sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'classDirs');
-            includeFilterStub = sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'includeFilter');
-            excludeFilterStub = sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'excludeFilter');
-            isNullOrWhitespaceStub = sandbox.stub(util, 'isNullOrWhitespace');
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'sourceDirs').value(fakeData.sourceDir);
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'classDirs').value(fakeData.classDir);
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'includeFilter').value(fakeData.includeFilter);
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'excludeFilter').value(fakeData.excludeFilter);;
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'reportDir').value(fakeData.reportDir);
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'getParentPomData').returns(fakeData.parentData);
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'getModulesData').returns([Q.resolve(), Q.resolve()]);
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'formatParentData').returns(fakeData.formattedParentData);
+            sandbox.stub(jacocoMavenCodeCoverageEnablerInstance, 'formatModulesData').returns(fakeData.modules);
             sandbox.stub(util, 'writeFile').resolves();
-            jacocoMavenMultiModuleReportStub = sandbox.stub(ccc, 'jacocoMavenMultiModuleReport').resolves();
+            isNullOrWhitespaceStub = sandbox.stub(util, 'isNullOrWhitespace');
+            jacocoMavenMultiModuleReportStub = sandbox.stub(ccc, 'jacocoMavenMultiModuleReport');
         });
         
         afterEach(() => {
-            sourceDirsStub.restore();
-            classDirsStub.restore();
-            includeFilterStub.restore();
-            excludeFilterStub.restore();
             isNullOrWhitespaceStub.reset();
             jacocoMavenMultiModuleReportStub.resetHistory();
         });
@@ -209,35 +215,33 @@ export function jacocomavenccenablerTests() {
         
         it('should join filters and set srcDirs and classDirs if they are null', async () => {
             isNullOrWhitespaceStub.returns(true);
-            includeFilterStub.value(fakeData.includeFilter);
-            excludeFilterStub.value(fakeData.excludeFilter);
-            sourceDirsStub.value(fakeData.sourceDir);
-            classDirsStub.value(fakeData.classDir);
-            await jacocoMavenCodeCoverageEnablerInstance.createMultiModuleReport(fakeData.reportDir);
+            await jacocoMavenCodeCoverageEnablerInstance.createMultiModuleReport({ project: {}});
             sinon.assert.calledOnceWithExactly(
                 jacocoMavenMultiModuleReportStub,
-                fakeData.reportDir,
-                ".",
-                ".",
+                path.basename(fakeData.reportDir),
+                '.',
+                '.',
                 fakeData.includeFilterStringifiedWithComma,
-                fakeData.excludeFilterStringifiedWithComma
+                fakeData.excludeFilterStringifiedWithComma,
+                fakeData.groupId,
+                fakeData.formattedParentData,
+                fakeData.modules
             );
         });
         
         it('should join filters and shouldn\'t set srcDirs and classDirs if they are not null', async () => {
             isNullOrWhitespaceStub.returns(false);
-            includeFilterStub.value(fakeData.includeFilter);
-            excludeFilterStub.value(fakeData.excludeFilter);
-            sourceDirsStub.value(fakeData.sourceDir);
-            classDirsStub.value(fakeData.classDir);
-            await jacocoMavenCodeCoverageEnablerInstance.createMultiModuleReport(fakeData.reportDir);
+            await jacocoMavenCodeCoverageEnablerInstance.createMultiModuleReport({ project: {}});
             sinon.assert.calledOnceWithExactly(
                 jacocoMavenMultiModuleReportStub,
-                fakeData.reportDir,
+                path.basename(fakeData.reportDir),
                 fakeData.sourceDir,
                 fakeData.classDir,
                 fakeData.includeFilterStringifiedWithComma,
-                fakeData.excludeFilterStringifiedWithComma
+                fakeData.excludeFilterStringifiedWithComma,
+                fakeData.groupId,
+                fakeData.formattedParentData,
+                fakeData.modules
             );
         });
     });

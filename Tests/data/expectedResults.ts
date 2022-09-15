@@ -247,11 +247,8 @@ cobertura {
 export const jacocoMavenSingleProject = {
     "groupId": "org.jacoco",
     "artifactId": "jacoco-maven-plugin",
-    "version": "0.8.7",
+    "version": "0.8.8",
     "configuration": {
-        "destFile": "report\\dir\\jacoco.exec",
-        "outputDirectory": "report/dir",
-        "dataFile": "report\\dir\\jacoco.exec",
         "includes": [{
             "include": [
                 '**/*$ViewInjector.class',
@@ -287,62 +284,33 @@ export const jacocoMavenSingleProject = {
 };
 
 export const jacocoMavenMultiProject = `<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>VstsReport</groupId>
-  <artifactId>VstsReport</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.8</version>
-        <executions>
-          <execution>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
-            <configuration>
-              <target>
-                <echo message="Generating JaCoCo Reports" />
-                <taskdef name="report" classname="org.jacoco.ant.ReportTask">
-                  <classpath path="{basedir}/target/jacoco-jars/org.jacoco.ant.jar" />
-                </taskdef>
-                <report>
-                  <executiondata>
-                    <file file="report\\dir\\jacoco.exec" />
-                  </executiondata>
-                  <structure name="Jacoco report">
-                    <classfiles>
-                      <fileset dir="some/folder1/with/classes" includes="'**/*$ViewInjector.class','**/*$ViewBinder.class'" excludes="'**/R.class','**/R$.class'" />${os.EOL}<fileset dir="some/folder2/with/classes" includes="'**/*$ViewInjector.class','**/*$ViewBinder.class'" excludes="'**/R.class','**/R$.class'" />${os.EOL}
-                    </classfiles>
-                    <sourcefiles encoding="UTF-8">
-                      <fileset dir="source/dir1" />${os.EOL}<fileset dir="source/dir2" />${os.EOL}
-                    </sourcefiles>
-                  </structure>
-                  <html destdir="report/dir" />
-                  <xml destfile="report/dir\\jacoco.xml" />
-                  <csv destfile="report/dir\\report.csv" />
-                </report>
-              </target>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>org.jacoco.ant</artifactId>
-            <version>0.8.7</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-    </plugins>
-  </build>
-</project>
-    `
+        <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+            <modelVersion>4.0.0</modelVersion>
+            <groupId>some.group.plugins</groupId>
+            <artifactId>report-artifact-id</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <packaging>pom</packaging>
+            <modules><module name="module"></module></modules>
+            <parentData></parentData>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.8</version>
+                        <executions>
+                            <execution>
+                                <id>jacoco-report-aggregate</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>report-aggregate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </project>`;
 
 export const coberturaMavenEnableConfiguration = `
     <plugin>
@@ -658,12 +626,10 @@ export const enableForkingWithoutCoberturaInstrument = '<project><target><cobert
 export const enableForkingWithCoberturaInstrument = '<project><target><cobertura-instrument>exist cobertura node</cobertura-instrument><junit><coberturaAntProperties/><coberturaAntClasspathRef/></junit></target></project>';
 export const enableForkingWithoutTarget = '<project><target/></project>';
 export const enableForkingWithJavac = '<project><target><javac debug="true"/></target></project>';
-export const addCodeCoverageDataSingleProject = ['addCodeCoveragePluginData'];
-export const addCodeCoverageDataMultiProject = [
-    'addCodeCoveragePluginData',
-    'createMultiModuleReport'
-];
-
+export const addCodeCoverageDataSingleProject = 'report\\target\\site\\jacoco';
+export const addCodeCoverageDataSingleProjectConfig = { project: {} };
+export const addCodeCoverageDataMultiProject = 'report\\dir\\target\\site\\jacoco-aggregate';
+export const addCodeCoverageDataMultiProjectConfig = { project: { modules: [{ module: ['dir'] }] }};
 export const getBuildDataNodeBuildString = {};
 export const getBuildDataNodeBuildJsonContentBuildString = { project: { build: {} } };
 export const getBuildDataNodeBuildArray = { element: 'some value' };

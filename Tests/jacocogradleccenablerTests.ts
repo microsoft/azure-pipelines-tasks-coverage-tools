@@ -81,7 +81,7 @@ export function jacocogradleccenablerTests() {
                     gradle5xOrHigher: 'true'
                 });
             sandbox.assert.calledOnce(ccc.jacocoGradleMultiModuleEnable);
-            assert.strictEqual(actual, true);
+            assert.strictEqual(actual, '');
         });
 
         it('should call \'jacocoGradleSingleModuleEnable\' if project is single-module', async () => {
@@ -96,7 +96,7 @@ export function jacocogradleccenablerTests() {
                     gradle5xOrHigher: 'true'
                 });
             sandbox.assert.calledOnce(ccc.jacocoGradleSingleModuleEnable);
-            assert.strictEqual(actual, true);
+            assert.strictEqual(actual, '');
         });
 
         it('should write warning and reject promise in case of error', async () => {
