@@ -69,7 +69,7 @@ export class JacocoMavenCodeCoverageEnabler extends cc.JacocoCodeCoverageEnabler
         let _this = this;
 
         if (!pomJson.project) {
-            Q.reject(tl.loc("InvalidBuildFile"));
+            return Q.reject(tl.loc("InvalidBuildFile"));
         }
 
         let isMultiModule = false;
