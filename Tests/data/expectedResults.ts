@@ -90,6 +90,72 @@ task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
     }
 }`;
 
+export const jacocoGradleAndroidSingleModuleConfiguration = `
+allprojects {
+    apply plugin: 'jacoco'
+}
+gradle.projectsEvaluated {
+    def jacocoExcludes = ['**/R.class','**/R$.class']
+    def jacocoIncludes = ['**/*$ViewInjector.class','**/*$ViewBinder.class']
+    task jacocoTestReport (type:JacocoReport, dependsOn: 'test') {
+        group = "Reporting"
+        description = "Generates Jacoco coverage report for rootProject."
+        rootProject.tasks.getByName('test').finalizedBy jacocoTestReport
+        
+        fileCollectionAssign fileTree(dir: "\${rootProject.buildDir}/some/folder/with/classes",  excludes: jacocoExcludes, includes: jacocoIncludes)
+        fileCollectionAssign fileTree(dir: "\${rootProject.buildDir}/jacoco", includes: ['**/*.exec'])
+        fileCollectionAssign files("\${rootProject.projectDir}/src/main/java")
+        reports {
+            xml.required  = true
+            xml.outputLocation = file("report/dir/summary.xml")
+            html.required  = true
+            html.outputLocation = file("report/dir")
+        }
+    }
+}`;
+
+export const jacocoGradleAndroidMultiModuleConfiguration = `
+allprojects {
+    apply plugin: 'jacoco'
+}
+subprojects {
+    apply plugin: 'com.android.application'
+    afterEvaluate {
+        def jacocoExcludes = ['**/R.class','**/R$.class']
+        def jacocoIncludes = ['**/*$ViewInjector.class','**/*$ViewBinder.class']
+        task jacocoTestReport (type:JacocoReport, dependsOn: 'test') {
+            group = "Reporting"
+            description = "Generates Jacoco coverage report for project."
+            project.tasks.getByName('test').finalizedBy jacocoTestReport
+            
+            fileCollectionAssign fileTree(dir: "\${project.buildDir}/some/folder/with/classes",  excludes: jacocoExcludes, includes: jacocoIncludes)
+            fileCollectionAssign fileTree(dir: "\${project.buildDir}/outputs/unit_test_code_coverage", includes: ['**/*.exec'])
+            fileCollectionAssign files("\${project.projectDir}/src/main/java")
+            reports {
+                xml.required  = true
+                xml.outputLocation = file("\${project.buildDir}/jacocoHtml/summary.xml")
+                html.required  = true
+                html.outputLocation = file("\${project.buildDir}/jacocoHtml")
+            }
+        }
+    }
+}
+gradle.projectsEvaluated {
+    task jacocoRootReport(type: JacocoReport, dependsOn: subprojects.test) {
+        group = "Reporting"
+        description = "Generates overall Jacoco coverage report."
+        fileCollectionAssign files(subprojects.jacocoTestReport.executionData)
+        fileCollectionAssign files(subprojects.jacocoTestReport.sourceDirectories)
+        fileCollectionAssign files(subprojects.jacocoTestReport.classDirectories)
+        reports {
+            html.required = true
+            xml.required = true
+            xml.destination file("report/dir/summary.xml")
+            html.destination file("report/dir")
+        }
+    }
+}`;
+
 export const coberturaGradleSingleModule = `
 allprojects {
     repositories {
