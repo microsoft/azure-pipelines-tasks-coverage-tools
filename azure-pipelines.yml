@@ -1,6 +1,5 @@
 trigger:
 - main
-- features/*
 - releases/*
 
 jobs:
@@ -29,15 +28,13 @@ jobs:
       artifactName: 'npm-package'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 
-  # For CI runs on master, automatically publish packages
-  - bash: |
-        echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-        cd _build
-        npm publish || true # Ignore publish failures, usually will happen because package already exists
-    displayName: NPM Publish
-    condition: and(succeeded(), in(variables['build.reason'], 'IndividualCI', 'BatchedCI', 'Manual'), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    env:
-      NPM_TOKEN: $(npmPublishToken)
+  - task: Npm@1
+    inputs:
+      command: publish
+      workingDir: '_build'
+      publishRegistry: useExternalRegistry
+      publishEndpoint: azure-pipelines-tasks-codecoverage-tools-npm
+    condition: and(succeeded(), in(variables['build.reason'], 'IndividualCI', 'BatchedCI', 'Manual'), in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/releases/*'))
 
 #################################################
 - job: 'macOS'
