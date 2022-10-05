@@ -33,7 +33,7 @@ jobs:
       command: publish
       workingDir: '_build'
       publishRegistry: useExternalRegistry
-      publishEndpoint: azure-pipelines-tasks-codecoverage-tools-npm
+      publishEndpoint: azure-pipelines-tasks-npm
     condition: and(succeeded(), in(variables['build.reason'], 'IndividualCI', 'BatchedCI', 'Manual'), in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/releases/*'))
 
 #################################################
