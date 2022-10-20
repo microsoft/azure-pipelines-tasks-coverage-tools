@@ -1,6 +1,12 @@
 trigger:
 - main
-- releases/*
+- release/*
+- feature/*
+
+variables:
+  isMain: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isRelease: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')]
+  isManual: $[in(variables['build.reason'], 'Manual')]
 
 jobs:
 #################################################
@@ -26,7 +32,7 @@ jobs:
       targetPath: '_build'
       artifactType: 'pipeline'
       artifactName: 'npm-package'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
 
   - task: Npm@1
     inputs:
@@ -34,7 +40,7 @@ jobs:
       workingDir: '_build'
       publishRegistry: useExternalRegistry
       publishEndpoint: azure-pipelines-tasks-npm
-    condition: and(succeeded(), in(variables['build.reason'], 'IndividualCI', 'BatchedCI', 'Manual'), in(variables['Build.SourceBranch'], 'refs/heads/main', 'refs/heads/releases/*'))
+    condition: and(succeeded(), eq(variables['isManual'], 'true'), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
 
 #################################################
 - job: 'macOS'
