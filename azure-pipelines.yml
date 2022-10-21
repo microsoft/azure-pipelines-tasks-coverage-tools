@@ -1,0 +1,52 @@
+trigger:
+- main
+- release/*
+- feature/*
+
+variables:
+  isMain: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isRelease: $[startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')]
+  isManual: $[in(variables['build.reason'], 'Manual')]
+
+jobs:
+#################################################
+- job: 'windows'
+#################################################
+  displayName: Build on Windows
+  pool:
+    vmImage: windows-2019
+  steps:
+  - template: ci/azure-pipelines-steps.yml
+
+#################################################
+- job: 'linux'
+#################################################
+  displayName: Build on Linux
+  pool:
+    vmImage: ubuntu-20.04
+  steps:
+  - template: ci/azure-pipelines-steps.yml
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '_build'
+      artifactType: 'pipeline'
+      artifactName: 'npm-package'
+    condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
+
+  - task: Npm@1
+    inputs:
+      command: publish
+      workingDir: '_build'
+      publishRegistry: useExternalRegistry
+      publishEndpoint: azure-pipelines-tasks-npm
+    condition: and(succeeded(), eq(variables['isManual'], 'true'), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
+
+#################################################
+- job: 'macOS'
+#################################################
+  displayName: Build on MacOS
+  pool:
+    vmImage: macOS-11
+  steps:
+  - template: ci/azure-pipelines-steps.yml

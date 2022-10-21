@@ -1,0 +1,12 @@
+steps:
+
+- task: NodeTool@0
+  displayName: Use Node 10.x
+  inputs:
+    versionSpec: "10.24.1"
+
+- script: npm install
+  displayName: 'NPM install'
+
+- script: npm run build
+  displayName: 'NPM run build'

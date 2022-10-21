@@ -210,3 +210,10 @@ _Pvt_Extensions/
 ModelManifest.xml
 /Package
 LoadTest.code-workspace
+
+# Optional npm cache directory
+.npm
+
+# Packed NPM
+.tgz
+.gz
