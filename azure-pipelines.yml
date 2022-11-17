@@ -39,7 +39,7 @@ jobs:
       command: publish
       workingDir: '_build'
       publishRegistry: useExternalRegistry
-      publishEndpoint: azure-pipelines-tasks-npm
+      publishEndpoint: npmJS
     condition: and(succeeded(), eq(variables['isManual'], 'true'), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
 
 #################################################
