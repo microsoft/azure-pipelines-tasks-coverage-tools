@@ -39,7 +39,7 @@ jobs:
       command: publish
       workingDir: '_build'
       publishRegistry: useExternalRegistry
-      publishEndpoint: npmJS
+      publishEndpoint: npmJS connection
     condition: and(succeeded(), eq(variables['isManual'], 'true'), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
 
 #################################################
