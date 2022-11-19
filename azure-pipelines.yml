@@ -32,7 +32,7 @@ jobs:
       targetPath: '_build'
       artifactType: 'pipeline'
       artifactName: 'npm-package'
-//    condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
+#    condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
 
   - task: Npm@1
     inputs:
@@ -40,7 +40,7 @@ jobs:
       workingDir: '_build'
       publishRegistry: useExternalRegistry
       publishEndpoint: NPM-Automation-Token
-//    condition: and(succeeded(), eq(variables['isManual'], 'true'), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
+#    condition: and(succeeded(), eq(variables['isManual'], 'true'), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
 
 #################################################
 - job: 'macOS'
