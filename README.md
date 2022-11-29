@@ -1,4 +1,4 @@
-# Azure Pipelines Task Codecoverage SDK   
+# Azure Pipelines Task Codecoverage SDK    
 
 Codecoverage libraries for [Azure Pipelines](https://azure.microsoft.com/en-us/services/devops/pipelines/) tasks.
 
