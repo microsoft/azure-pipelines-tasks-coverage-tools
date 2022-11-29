@@ -40,7 +40,9 @@ jobs:
       workingDir: '_build'
       publishRegistry: useExternalRegistry
       publishEndpoint: NPM-Automation-Token
+
 #    condition: and(succeeded(), eq(variables['isManual'], 'true'), or(eq(variables['isMain'], 'true'), eq(variables['isRelease'], 'true')))
+
 
 #################################################
 - job: 'macOS'
