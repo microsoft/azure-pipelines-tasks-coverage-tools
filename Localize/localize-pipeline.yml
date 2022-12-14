@@ -18,7 +18,6 @@ stages:
     pool:
       vmImage: windows-latest
     steps:
-
     - checkout: self
       persistCredentials: true
 
@@ -102,13 +101,13 @@ stages:
     # Notifications are set by POST method to MS Teams webhook
     # Body of message is compiled as Office 365 connector card
     # More details about cards - https://docs.microsoft.com/en-us/microsoftteams/platform/task-modules-and-cards/cards/cards-reference#office-365-connector-card
-    - powershell: 'ci\localization-updates\send-notifications.ps1 -IsPRCreated $true -RepoName "Azure-Pipelines-Tasks-Coverage-Tools"'
+    - powershell: 'ci\localization-updates\send-notifications.ps1 -IsPRCreated $true -RepoName "Tasks Coverage Tools"'
       displayName: 'Send MS Teams notification about PR opened'
       env:
         TEAMS_WEBHOOK: $(MSTeamsUri)
       condition: and(succeeded(), eq(variables['SHOULDCREATEPR'], 'True'), eq(variables['build.reason'], 'Schedule'))
 
-    - powershell: 'ci\localization-updates\send-notifications.ps1 -IsPRCreated $false -RepoName "Azure-Pipelines-Tasks-Coverage-Tools"'
+    - powershell: 'ci\localization-updates\send-notifications.ps1 -IsPRCreated $false -RepoName "Tasks Coverage Tools"'
       displayName: 'Send MS Teams notification about error'
       env:
         TEAMS_WEBHOOK: $(MSTeamsUri)
